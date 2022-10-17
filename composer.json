@@ -1,0 +1,19 @@
+{
+    "name": "ampeco/phpstan-rules",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Ampeco\\PhpstanRules\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dimitar Dishev",
+            "email": "dimitar.dishev@ampeco.global"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "phpstan/phpstan": "^1.8.1"
+    }
+}
