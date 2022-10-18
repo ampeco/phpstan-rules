@@ -12,8 +12,19 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<Node\Stmt\Use_>
  */
-class NoParentImportInModule implements Rule
+class PreventNamespacesUsage implements Rule
 {
+    /**
+     * These namespaces cannot be imported within the current scanned path
+     * @var string[]
+     */
+    private array $namespaces;
+
+    public function __construct(array $namespaces = [])
+    {
+        $this->namespaces = $namespaces;
+    }
+
     /**
      * @inheritDoc
      */
@@ -24,19 +35,13 @@ class NoParentImportInModule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!str_contains($scope->getFile(), 'modules')) {
-            return [];
-        }
-        if ($node->type !== Node\Stmt\Use_::TYPE_NORMAL) {
-            return [];
-        }
         $errors = [];
         /** @var Node\Stmt\UseUse $use */
         foreach ($node->uses as $use) {
-            if ('App' === $use->name->getFirst()) {
+            if (in_array($use->name->getFirst(), $this->namespaces)) {
                 $errors[] =
                     RuleErrorBuilder::message(
-                        'Violation detected. Class ' . $use->name->toString() . ' is part of the parent project, it must NOT be imported in module.',
+                        'Class ' . $use->name->toString() . ' cannot be imported here.',
                     )->build();
             }
         }

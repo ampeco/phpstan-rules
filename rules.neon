@@ -1,2 +1,16 @@
-rules:
-    - Ampeco\PhpstanRules\NoParentImportInModule
+parametersSchema:
+    preventNamspacesUsage: structure([
+        restricted: listOf(string())
+    ])
+
+parameters:
+    preventNamspacesUsage:
+        restricted: []
+
+services:
+	-
+		class: Ampeco\PhpstanRules\PreventNamespacesUsage
+		tags:
+		    - phpstan.rules.rule
+		arguments:
+			namespaces: %preventNamspacesUsage.restricted%
