@@ -1,16 +1,14 @@
 parametersSchema:
-    preventNamspacesUsage: structure([
-        restricted: listOf(string())
+    preventNamespacesUsageInDirectories: structure([
+        directories: arrayOf(arrayOf(arrayOf(string())))
     ])
-
 parameters:
-    preventNamspacesUsage:
-        restricted: []
+    preventNamespacesUsageInDirectories: []
 
 services:
 	-
-		class: Ampeco\PhpstanRules\PreventNamespacesUsage
+		class: Ampeco\PhpstanRules\PreventNamespacesUsageInDirectories
 		tags:
 		    - phpstan.rules.rule
 		arguments:
-			namespaces: %preventNamspacesUsage.restricted%
+			directories: %preventNamespacesUsageInDirectories.directories%
