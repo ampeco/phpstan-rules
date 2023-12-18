@@ -49,10 +49,10 @@ class PreventNamespacesUsageInDirectories implements Rule
         $errors = [];
         foreach ($node->uses as $use) {
             $useFullNamespace = $use->name->toString();
+            if (in_array($useFullNamespace, $this->exceptions)) {
+                continue;
+            }
             foreach ($namespaces as $namespace) {
-                if (in_array($namespace, $this->exceptions)) {
-                    continue;
-                }
                 if (str_starts_with($useFullNamespace, $namespace)) {
                     $errors[] =
                         RuleErrorBuilder::message(
