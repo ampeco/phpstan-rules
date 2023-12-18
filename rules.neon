@@ -1,9 +1,11 @@
 parametersSchema:
     preventNamespacesUsageInDirectories: structure([
         directories: arrayOf(arrayOf(arrayOf(string())))
+        exceptions: arrayOf(string())
     ])
 parameters:
     preventNamespacesUsageInDirectories: []
+    exceptions: []
 
 services:
 	-
@@ -12,3 +14,4 @@ services:
 		    - phpstan.rules.rule
 		arguments:
 			directories: %preventNamespacesUsageInDirectories.directories%
+			exceptions: %preventNamespacesUsageInDirectories.exceptions%

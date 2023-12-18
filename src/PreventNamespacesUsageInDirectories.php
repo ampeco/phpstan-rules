@@ -20,10 +20,17 @@ class PreventNamespacesUsageInDirectories implements Rule
      * @var array<string, array<string>>
      */
     private array $directories;
+    /**
+     * A list of namespaces that should not cause an error
+     *
+     * @var array<string>
+     */
+    private array $exceptions;
 
-    public function __construct(array $directories = [])
+    public function __construct(array $directories = [], array $exceptions = [])
     {
         $this->directories = array_merge(...$directories);
+        $this->exceptions = $exceptions;
     }
 
     public function getNodeType(): string
@@ -43,6 +50,9 @@ class PreventNamespacesUsageInDirectories implements Rule
         foreach ($node->uses as $use) {
             $useFullNamespace = $use->name->toString();
             foreach ($namespaces as $namespace) {
+                if (in_array($namespace, $this->exceptions)) {
+                    continue;
+                }
                 if (str_starts_with($useFullNamespace, $namespace)) {
                     $errors[] =
                         RuleErrorBuilder::message(
