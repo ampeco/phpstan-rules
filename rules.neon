@@ -15,3 +15,7 @@ services:
 		arguments:
 			directories: %preventNamespacesUsageInDirectories.directories%
 			exceptions: %preventNamespacesUsageInDirectories.exceptions%
+    -
+        class: Ampeco\PhpstanRules\ShouldQueueJobRule
+        tags:
+            - phpstan.rules.rule
