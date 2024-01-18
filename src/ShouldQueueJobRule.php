@@ -1,9 +1,10 @@
 <?php
+
 namespace Ampeco\PhpstanRules;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Queue\SerializesModels;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
@@ -28,7 +29,7 @@ class ShouldQueueJobRule implements Rule
             return [];
         }
 
-        $className = (string) $scope->getNamespace() . '\\' . $node->name->toString();
+        $className = $node->namespacedName->toString();
         if (!class_exists($className)) {
             return [];
         }
@@ -36,11 +37,11 @@ class ShouldQueueJobRule implements Rule
         $classReflection = new \ReflectionClass($className);
 
         // Check if the class implements ShouldQueue
-        if (!in_array(ShouldQueue::class, $classReflection->getInterfaceNames())) {
+        if (!in_array(ShouldQueue::class, class_implements($className))) {
             return [];
         }
 
-        $usesSerializesModels = in_array(SerializesModels::class, $classReflection->getTraitNames());
+        $usesSerializesModels = in_array(SerializesModels::class, class_uses_recursive($className));
         $hasModelProperty = false;
 
         // Check for Model properties
@@ -53,7 +54,7 @@ class ShouldQueueJobRule implements Rule
 
         if ($hasModelProperty && !$usesSerializesModels) {
             return [
-                sprintf('A job "%s" implementing ShouldQueue with a Model property must use the SerializesModels trait.', $className)
+                sprintf('A job "%s" implementing ShouldQueue with a Model property must use the SerializesModels trait.', $className),
             ];
         }
 
