@@ -29,8 +29,8 @@ class ShouldQueueJobRule implements Rule
             return [];
         }
 
-        $className = $node->namespacedName->toString();
-        if (!class_exists($className)) {
+        $className = $node->namespacedName?->toString();
+        if (!$className || !class_exists($className)) {
             return [];
         }
 
