@@ -19,3 +19,7 @@ services:
 		class: Ampeco\PhpstanRules\ShouldQueueJobRule
 		tags:
 			- phpstan.rules.rule
+	-
+		class: Ampeco\PhpstanRules\PreventUsingOperatorFacadeInMigrations
+		tags:
+			- phpstan.rules.rule
