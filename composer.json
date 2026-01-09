@@ -15,6 +15,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "phpstan/phpstan": "^1.10"
+        "phpstan/phpstan": "^1.10|^2.0"
     }
 }
