@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 class ShouldQueueJobRule implements Rule
@@ -54,7 +55,7 @@ class ShouldQueueJobRule implements Rule
 
         if ($hasModelProperty && !$usesSerializesModels) {
             return [
-                sprintf('A job "%s" implementing ShouldQueue with a Model property must use the SerializesModels trait.', $className),
+                RuleErrorBuilder::message(sprintf('A job "%s" implementing ShouldQueue with a Model property must use the SerializesModels trait.', $className))->build(),
             ];
         }
 
